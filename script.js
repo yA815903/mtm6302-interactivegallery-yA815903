@@ -1,36 +1,63 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const images = [
-        { src: 'path/to/image1.jpg', caption: 'Image 1 description' },
-        // Add more images as needed
-    ];
+const gallery = document.querySelector('.gallery');
+const modal = document.querySelector('.modal');
+const modalImg = document.querySelector('.modal img');
+const modalCaption = document.querySelector('.modal p');
 
-    const gallery = document.querySelector('.gallery');
-    images.forEach(image => {
-        const img = document.createElement('img');
-        img.src = image.src;
-        img.alt = 'Gallery Image';
-        img.classList.add('gallery-img');
-        img.dataset.caption = image.caption;
-        img.addEventListener('click', function() {
-            showImage(this.src, this.dataset.caption);
-        });
-        gallery.appendChild(img);
+const images = [
+    { src: 'images/battle.jpg', caption: 'Battle' },
+    { src: 'images/last of us.jpg', caption: 'Last of Us' },
+    { src: 'images/Viking human.jpg', caption: 'Viking Human' },
+    { src: 'images/viking.jpg', caption: 'Viking' },
+    // Add more images here
+];
+
+function createImageElement(src, caption) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = caption;
+    img.loading = 'lazy';
+
+    const figcaption = document.createElement('p');
+    figcaption.textContent = caption;
+
+    const figure = document.createElement('figure');
+    figure.appendChild(img);
+    figure.appendChild(figcaption);
+
+    return figure;
+}
+
+function showModal(src, caption) {
+    modalImg.src = src;
+    modalCaption.textContent = caption;
+    modal.style.display = 'block';
+}
+
+function hideModal() {
+    modal.style.display = 'none';
+}
+
+function handleImageClick(event) {
+    const img = event.target;
+    const src = img.src;
+    const caption = img.alt;
+    showModal(src, caption);
+}
+
+function handleModalClick(event) {
+    if (event.target === modal) {
+        hideModal();
+    }
+}
+
+function init() {
+    images.forEach(({ src, caption }) => {
+        const figure = createImageElement(src, caption);
+        gallery.appendChild(figure);
+        figure.addEventListener('click', handleImageClick);
     });
 
-    function showImage(src, caption) {
-        const popupImage = document.getElementById('popupImage');
-        const imagePopup = document.getElementById('imagePopup');
-        const imageCaption = document.getElementById('imageCaption');
+    modal.addEventListener('click', handleModalClick);
+}
 
-        popupImage.src = src;
-        imageCaption.textContent = caption;
-        imagePopup.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeImage() {
-        const imagePopup = document.getElementById('imagePopup');
-        imagePopup.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-});
+init();
