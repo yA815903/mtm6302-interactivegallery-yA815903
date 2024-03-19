@@ -1,63 +1,60 @@
-const gallery = document.querySelector('.gallery');
-const modal = document.querySelector('.modal');
-const modalImg = document.querySelector('.modal img');
-const modalCaption = document.querySelector('.modal p');
-
+// script.js
 const images = [
-    { src: 'images/battle.jpg', caption: 'Battle' },
-    { src: 'images/last of us.jpg', caption: 'Last of Us' },
-    { src: 'images/Viking human.jpg', caption: 'Viking Human' },
-    { src: 'images/viking.jpg', caption: 'Viking' },
-    // Add more images here
+    {
+        id: "battle",
+        src: "images/battle.jpg",
+        hdSrc: "images/battle_hd.jpg",
+        caption: "Image 1"
+    },
+    {
+        id: "last-of-us",
+        src: "images/last of us.jpg",
+        hdSrc: "images/last-of-us_hd.jpg",
+        caption: "Image 2"
+    },
+    {
+        id: "viking human",
+        src: "images/viking human.jpg",
+        hdSrc: "images/viking human_hd.jpg",
+        caption: "Image 3"
+    },
+    {
+        id: "viking",
+        src: "images/viking.jpg",
+        hdSrc: "images/viking_hd.jpg",
+        caption: "Image 4"
+    },
 ];
 
-function createImageElement(src, caption) {
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = caption;
-    img.loading = 'lazy';
+const gallery = document.querySelector(".gallery");
 
-    const figcaption = document.createElement('p');
-    figcaption.textContent = caption;
+images.forEach((image) => {
+    const img = document.createElement("img");
+    img.src = image.src;
+    img.dataset.hdSrc = image.hdSrc;
+    img.dataset.caption = image.caption;
+    img.alt = image.caption;
+    img.addEventListener("click", showHDImage);
+    gallery.appendChild(img);
+});
 
-    const figure = document.createElement('figure');
-    figure.appendChild(img);
-    figure.appendChild(figcaption);
-
-    return figure;
-}
-
-function showModal(src, caption) {
-    modalImg.src = src;
-    modalCaption.textContent = caption;
-    modal.style.display = 'block';
-}
-
-function hideModal() {
-    modal.style.display = 'none';
-}
-
-function handleImageClick(event) {
+function showHDImage(event) {
     const img = event.target;
-    const src = img.src;
-    const caption = img.alt;
-    showModal(src, caption);
+    const hdImage = document.createElement("div");
+    hdImage.className = "hd-image";
+    hdImage.innerHTML = `<img src="${img.dataset.hdSrc}" alt="${img.dataset.caption}">`;
+    hdImage.addEventListener("click", hideHDImage);
+    const caption = document.createElement("div");
+    caption.className = "caption";
+    caption.textContent = img.dataset.caption;
+    document.body.appendChild(hdImage);
+    document.body.appendChild(caption);
+    hdImage.style.display = "block";
+    caption.style.display = "block";
 }
 
-function handleModalClick(event) {
-    if (event.target === modal) {
-        hideModal();
-    }
+function hideHDImage(event) {
+    const hdImage = event.target.closest(".hd-image");
+    const caption = document.querySelector(".caption");hdImage.style.display = "none";
+    caption.style.display = "none";
 }
-
-function init() {
-    images.forEach(({ src, caption }) => {
-        const figure = createImageElement(src, caption);
-        gallery.appendChild(figure);
-        figure.addEventListener('click', handleImageClick);
-    });
-
-    modal.addEventListener('click', handleModalClick);
-}
-
-init();
