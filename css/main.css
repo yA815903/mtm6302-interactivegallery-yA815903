@@ -1,3 +1,9 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -11,31 +17,35 @@
     cursor: pointer;
 }
 
-.hd-image {
+.gallery .hd-image {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
-    display: none;
-    align-items: center;
-    justify-content: center;
+    z-index: 1000;
 }
 
-.hd-image img {
+.gallery .hd-image img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     max-width: 90%;
     max-height: 90%;
 }
 
-.caption {
+.gallery .caption {
+    display: none;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
+    padding: 10px;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 10px;
     text-align: center;
-    display: none;
+    z-index: 1000;
 }
